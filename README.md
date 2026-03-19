@@ -11,7 +11,8 @@ The goal is not to build a giant swarm framework. The goal is to keep orchestrat
 - `/work` for hybrid direct-vs-delegated execution
 - `/research` for journaled read-heavy investigation
 - `/review` for journaled bounded review
-- `orchestrator`, `worker`, `reviewer`, and `explore` agents
+- a visible `orchestrator` primary agent you can tab to in the UI
+- `worker`, `reviewer`, and `explore` subagents for delegation
 - automatic `.journal/` bootstrap in the active project root
 - `shared-context.md` plus per-run and per-step journal files
 

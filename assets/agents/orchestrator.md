@@ -1,6 +1,6 @@
 ---
 description: Hybrid orchestration agent for bounded direct work and low-fan-out delegation
-mode: subagent
+mode: primary
 temperature: 0.1
 permission:
   edit: allow
