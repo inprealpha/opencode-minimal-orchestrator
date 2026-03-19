@@ -44,6 +44,7 @@ What this does:
 - copies the bundled agents into `~/.config/opencode/agents/`
 - copies the bundled commands into `~/.config/opencode/commands/`
 - copies the plugin into `~/.config/opencode/plugins/`
+- does not require or modify `~/.config/opencode/package.json`
 - leaves your existing `~/.config/opencode/opencode.json` choices alone
 
 ### Option 2: Install into one project only
