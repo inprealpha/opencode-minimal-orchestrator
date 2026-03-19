@@ -1,0 +1,19 @@
+{
+  "name": "opencode-minimal-orchestrator",
+  "version": "0.1.0",
+  "description": "Bun installer for the minimal OpenCode orchestration bundle",
+  "type": "module",
+  "bin": {
+    "opencode-minimal-orchestrator": "./src/cli.ts"
+  },
+  "files": [
+    "assets",
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "install:global": "bun run src/cli.ts install --global",
+    "install:project": "bun run src/cli.ts install --project .",
+    "validate": "bun run src/cli.ts validate"
+  }
+}
