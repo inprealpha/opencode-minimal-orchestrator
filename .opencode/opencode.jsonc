@@ -1,0 +1,24 @@
+{
+  // Auto-inject shared context into all agent system prompts.
+  // Each path is resolved relative to the project root.
+  "instructions": ["./shared_context.md"],
+
+  // Agent-specific configuration.
+  // Orchestrator and worker use defaults (all tools enabled).
+  "agent": {
+    // Scout: read-only access — cannot create or modify files.
+    "scout": {
+      "tools": {
+        "write": { "deny": ["*"] },
+        "edit": { "deny": ["*"] }
+      }
+    },
+    // Reviewer: read-only access — cannot create or modify files.
+    "reviewer": {
+      "tools": {
+        "write": { "deny": ["*"] },
+        "edit": { "deny": ["*"] }
+      }
+    }
+  }
+}
