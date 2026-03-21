@@ -1,8 +1,24 @@
 {
   // Global orchestration config — merge the relevant sections into your ~/.config/opencode/opencode.jsonc.
   //
-  // No config entries are required for this orchestrator by default:
-  // - Custom agents are auto-discovered from ~/.config/opencode/{agent,agents}/.
-  // - shared_context.md is loaded explicitly by the orchestrator, not via "instructions".
-  // - Tool permissions are enforced by agent prompts, not config.
+  // Custom agents are auto-discovered from ~/.config/opencode/agent/.
+  // shared_context.md is loaded explicitly by the orchestrator, not via "instructions".
+
+  // Tool permissions are enforced programmatically — prompts alone are not reliable.
+  "agent": {
+    // Scout: read-only — cannot create or modify files.
+    "scout": {
+      "tools": {
+        "write": { "deny": ["*"] },
+        "edit": { "deny": ["*"] }
+      }
+    },
+    // Reviewer: read-only — cannot create or modify files.
+    "reviewer": {
+      "tools": {
+        "write": { "deny": ["*"] },
+        "edit": { "deny": ["*"] }
+      }
+    }
+  }
 }
