@@ -1,24 +1,8 @@
 {
-  // Auto-inject shared context into all agent system prompts.
-  // Each path is resolved relative to the project root.
-  "instructions": ["./shared_context.md"],
-
-  // Agent-specific configuration.
-  // Orchestrator and worker use defaults (all tools enabled).
-  "agent": {
-    // Scout: read-only access — cannot create or modify files.
-    "scout": {
-      "tools": {
-        "write": { "deny": ["*"] },
-        "edit": { "deny": ["*"] }
-      }
-    },
-    // Reviewer: read-only access — cannot create or modify files.
-    "reviewer": {
-      "tools": {
-        "write": { "deny": ["*"] },
-        "edit": { "deny": ["*"] }
-      }
-    }
-  }
+  // Global orchestration config — merge the relevant sections into your ~/.config/opencode/opencode.jsonc.
+  //
+  // No config entries are required for this orchestrator by default:
+  // - Custom agents are auto-discovered from ~/.config/opencode/{agent,agents}/.
+  // - shared_context.md is loaded explicitly by the orchestrator, not via "instructions".
+  // - Tool permissions are enforced by agent prompts, not config.
 }
