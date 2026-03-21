@@ -1,24 +1,33 @@
 {
-  // Global orchestration config — merge the relevant sections into your ~/.config/opencode/opencode.jsonc.
-  //
-  // Custom agents are auto-discovered from ~/.config/opencode/agent/.
-  // shared_context.md is loaded explicitly by the orchestrator, not via "instructions".
+  "$schema": "https://opencode.ai/config.json",
 
-  // Tool permissions are enforced programmatically — prompts alone are not reliable.
+  // Pair this with custom agent markdown files installed in
+  // ~/.config/opencode/agents/ (or another supported OpenCode agent directory).
+  // Keep this companion config minimal: pick the default primary agent and
+  // apply only the permissions the current config contract can express cleanly.
+  "default_agent": "orchestrator",
+
   "agent": {
-    // Scout: read-only — cannot create or modify files.
     "scout": {
-      "tools": {
-        "write": { "deny": ["*"] },
-        "edit": { "deny": ["*"] }
+      "permission": {
+        // Later rules win. This keeps scout read-oriented while still allowing
+        // optional notes under .opencode/journal/.
+        "edit": {
+          "*": "deny",
+          ".opencode/journal/**": "allow"
+        }
       }
     },
-    // Reviewer: read-only — cannot create or modify files.
     "reviewer": {
-      "tools": {
-        "write": { "deny": ["*"] },
-        "edit": { "deny": ["*"] }
+      "permission": {
+        "edit": {
+          "*": "deny",
+          ".opencode/journal/**": "allow"
+        }
       }
     }
   }
+
+  // This minimal config does not make bash truly read-only. Shell side effects
+  // still depend on agent instructions and any interactive permission checks.
 }

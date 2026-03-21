@@ -2,16 +2,16 @@
 
 A minimal orchestration layer for OpenCode: 4 agents with focused roles, journal-based knowledge sharing, and signal/noise separation. The orchestrator delegates, workers execute, and context stays lean.
 
-`AGENTS.md` lives in the project root, is auto-discovered by OpenCode, and is visible to all agents. Custom agent prompt files are installed globally at `~/.config/opencode/agent/`.
+`AGENTS.md` lives in the project root, is auto-discovered by OpenCode, and is visible to all agents. Custom agent prompt files are installed globally at `~/.config/opencode/agents/`.
 
 ## Available Agents
 
 | Agent | Role | When to Use |
 |-------|------|-------------|
-| `@orchestrator` | Tech lead, primary agent | User talks to this. It reads `shared_context.md` at session start, decides what to do directly, and delegates complex tasks. |
-| `@worker` | Implementation | Multi-file changes, code writing, test running |
-| `@scout` | Read-only explorer | Finding code, analyzing architecture, mapping dependencies |
-| `@reviewer` | Code review | Reviewing changes for bugs, security, logic errors |
+| `orchestrator` | Tech lead, primary agent | User talks to this. Its prompt tells it to load `shared_context.md` explicitly at session start, decide what to do directly, and delegate complex tasks. |
+| `worker` | Implementation | Multi-file changes, code writing, test running |
+| `scout` | Read-only explorer | Finding code, analyzing architecture, mapping dependencies |
+| `reviewer` | Code review | Reviewing changes for bugs, security, logic errors |
 
 ## Delegation Guidelines
 
@@ -22,38 +22,38 @@ A minimal orchestration layer for OpenCode: 4 agents with focused roles, journal
 
 **How to delegate:**
 
-Use the `task` tool to call sub-agents:
+Use the `task` tool to dispatch the named sub-agent with a concrete prompt. Conceptually:
 
 ```
-task("@worker", "implement the auth module with JWT tokens in src/auth/")
-task("@scout", "map all database query patterns across the codebase")
-task("@reviewer", "review the changes in src/auth/ for security issues")
+- worker: implement the auth module with JWT tokens in src/auth/
+- scout: map all database query patterns across the codebase
+- reviewer: review the changes in src/auth/ for security issues
 ```
 
-When delegating, the orchestrator should include only the relevant project context from `shared_context.md` in the task prompt. Sub-agents do not automatically receive `shared_context.md`; they only see what the orchestrator includes.
+When delegating, the orchestrator should include only the relevant project context from `shared_context.md` in the task prompt. `shared_context.md` is not auto-injected into sub-agents, so they should not assume the full file was handed to them unless the orchestrator explicitly does so.
 
 **Parallel dispatch** — when tasks are independent, dispatch simultaneously:
 
 ```
-task("@scout", "find all API route definitions")
-task("@scout", "find all database migration files")
+- scout: find all API route definitions
+- scout: find all database migration files
 ```
 
 **Serial dispatch** — when tasks depend on each other, wait for results:
 
 ```
-result = task("@scout", "find the auth middleware implementation")
-task("@worker", "refactor auth middleware based on: {result}")
+1. Ask scout to find the auth middleware implementation
+2. Then ask worker to refactor it using the scout findings
 ```
 
 ## Shared Context
 
 **File**: `shared_context.md`
 
-- The orchestrator reads this file explicitly at session start.
-- It is the single source of truth for project knowledge: tech stack, conventions, architecture decisions, and domain context.
+- The orchestrator is expected to read this file explicitly at session start.
+- It is the starter reference for project knowledge: tech stack, conventions, architecture decisions, and domain context.
 - Relevant pieces should be passed down to sub-agents inside task prompts.
-- Sub-agents do not have direct access to `shared_context.md` unless the orchestrator includes that information.
+- Sub-agents should not assume `shared_context.md` was included verbatim; the orchestrator usually hands off only the relevant parts.
 - Keep it concise so delegated prompts stay focused.
 
 ## Journal System
@@ -66,7 +66,7 @@ This journal directory is per-project. It is created at the project root the fir
 
 **Rules**:
 
-- **Naming convention**: `{agent}-{task-summary}.md` (for example, `scout-auth-architecture.md`, `worker-api-refactor.md`)
+- **Naming convention**: `{agent}-{topic}.md` under `.opencode/journal/` (for example, `scout-auth-architecture.md`, `worker-api-refactor.md`, `reviewer-security-pass.md`)
 - **Who writes**: Any sub-agent during task execution
 - **Who reads**: Any agent can grep journal files for cross-task context
 - **Orchestrator should not read journal files directly**: sub-agents extract and return only what matters
