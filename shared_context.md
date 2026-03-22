@@ -1,43 +1,44 @@
-# Shared Project Context Template
+# Shared Project Context — Optional Reference Template
 
-> **Starter scaffold:** replace the placeholder text below with project-specific facts.
-> This file is meant for the orchestrator to load explicitly, then hand off the relevant parts each sub-agent needs.
-> Keep it concise, delete sections that do not matter, and remove the example bullets once you have real content.
+> **This file is optional.** The orchestrator bootstraps from standard project files (`README`, `package.json`, `pyproject.toml`, etc.) by default.
+> Create this file only when you have curated project knowledge worth preserving across sessions — things the orchestrator cannot reliably infer from source files alone.
+> Delete any section you do not need. Remove example bullets once you add real content.
 
 ---
 
 ## Project Overview
 
-*Scaffold — replace with what the project does, who it is for, and what problem it solves.*
+*What the project does, who it is for, and what problem it solves.*
 
 - Example: A CLI tool that generates invoice PDFs from YAML config files, used by freelancers.
 
 ## Architecture
 
-*Scaffold — replace with key directories, entry points, and the main data or request flow.*
+*Key directories, entry points, and the main data or request flow.*
 
 - Example: `src/` contains core logic, `src/handlers/` has request handlers, `config/` has environment configs. Requests flow through middleware → router → handler → service → database.
 
 ## Tech Stack
 
-*Scaffold — replace with languages, frameworks, key libraries, and runtime versions.*
+*Languages, frameworks, key libraries, and runtime versions.*
 
 - Example: TypeScript 5.x, Node 20, Express, Prisma ORM, PostgreSQL 16, Vitest for testing.
 
 ## Conventions
 
-*Scaffold — replace with coding patterns, naming rules, file organization, and formatting preferences.*
+*Coding patterns, naming rules, file organization, and formatting preferences.*
 
 - Example: Use named exports. Files are kebab-case. Components use PascalCase. Format with Prettier (2-space indent, no semicolons). Prefer `async/await` over `.then()`.
 
-## Domain Knowledge
+## Key Terms (optional)
 
-*Scaffold — replace with business concepts, domain terms, and important relationships agents should know.*
+*Domain-specific terms, abbreviations, or concept relationships that are not obvious from the code.*
 
 - Example: A "workspace" contains many "projects". Each "project" has "members" with roles (owner, editor, viewer). Billing is per-workspace, not per-project.
 
-## Tone & Communication
+## Tone & Communication (optional)
 
-*Scaffold — replace with how agents should communicate in this project.*
+*How agents should communicate in this project. If omitted, agents default to: clear, precise, technically honest — aimed at a technical audience that may not be developers.*
 
-- Example: Be concise and direct. Skip pleasantries. Use bullet points over paragraphs. Explain trade-offs when suggesting alternatives.
+- Default: Explain what was done and why, without jargon shortcuts or oversimplification. [Example: say "the request failed because the server returned a 403 status, meaning the credentials lack permission for that endpoint" — not "got a 403" and not "the computer said no."]
+- Override example: Be terse. Skip context. Bullet points only. Assume the reader is a senior engineer on the team.

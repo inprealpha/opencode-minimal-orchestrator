@@ -28,6 +28,24 @@
     }
   }
 
-  // This minimal config does not make bash truly read-only. Shell side effects
-  // still depend on agent instructions and any interactive permission checks.
+  // ── Runtime Plugin ──────────────────────────────────────────────
+  // The orchestrator-runtime plugin is auto-discovered from
+  // .opencode/plugin/orchestrator-runtime.ts when installed there.
+  //
+  // If you prefer explicit loading (e.g. from a non-standard path),
+  // uncomment the line below and adjust the path:
+  //
+  // "plugin": ["file://.opencode/plugin/orchestrator-runtime.ts"]
+  //
+  // The plugin adds:
+  //   - Shell command guard for read-only agents (scout, reviewer)
+  //   - Write guard enforcing journal-only writes for read-only agents
+  //   - Compaction recovery context injection
+  //   - Delegated task tracking with poll_tasks custom tool
+  //   - Error classification annotations on tool output
+  //   - Completed-task notifications injected into chat messages
+  //
+  // Shell discipline and edit permissions that were previously
+  // prompt-only are now also enforced by plugin hooks.
+  // To disable: remove the plugin file or set "plugin": [].
 }

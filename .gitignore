@@ -1,4 +1,5 @@
 .opencode/journal/*
 !.opencode/journal/.gitkeep
+.opencode/orchestrator-state.json
 node_modules/
 .DS_Store

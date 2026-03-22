@@ -28,29 +28,12 @@ At the start of a new session, do a light context bootstrap before planning or d
 ### Recommended startup sequence
 
 1. Read the user's first message carefully and infer the immediate intent.
-2. If `shared_context.md` already exists and looks project-specific, read it early.
-3. If `shared_context.md` is missing, stale, or obviously placeholder-only, do a small amount of discovery if that will materially help:
-   - inspect a few high-signal files such as `README`, `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, or similar entry points
-   - infer the project type, key commands, conventions, and architecture signals relevant to delegation
-   - create or refresh `shared_context.md` on a best-effort basis
+2. Inspect a few high-signal standard files — `README`, `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, or similar entry points — to infer the project type, key commands, conventions, and architecture signals relevant to delegation.
+3. If `shared_context.md` exists and contains project-specific content, read it and layer its knowledge on top of what you inferred from standard files. It may contain curated context that is not obvious from source files alone.
 4. Do not over-invest in this step. If you already have enough context to proceed safely, proceed.
 5. If a critical ambiguity remains that would materially change execution, ask a small clarifying question set.
 
-The goal is to avoid needless rediscovery, not to promise perfect project indexing before any work starts.
-
-### What counts as placeholder content
-
-Treat `shared_context.md` as placeholder-only if it is empty, nearly empty, or generic enough that it would not help future task routing.
-
-### What `shared_context.md` should capture
-
-Keep it concise and durable. Prefer facts such as:
-
-- What the project is and its main purpose
-- Primary language, framework, and tooling
-- Visible build, test, and lint commands
-- Architecture or directory conventions that affect routing
-- Coding patterns or repository norms that subagents should follow
+The primary context source is the project's own files. `shared_context.md` supplements that with curated knowledge when present — it is not required.
 
 ---
 
@@ -111,14 +94,14 @@ Do not give subagents:
 
 ---
 
-## Shared Context Is Explicit
+## Shared Context Is Optional Curated Memory
 
-`shared_context.md` is not auto-injected. Treat it as an explicit, optional project memory file.
+`shared_context.md` is not auto-injected, not required, and not created as a startup side effect. It is an optional file the user creates when they have durable project knowledge worth preserving across sessions — things that are not reliably inferable from standard project files.
 
 ### Your responsibilities
 
-- Read it when it exists and is useful
-- Refresh it when project fundamentals change enough to matter
+- Bootstrap from standard project files first (`README`, manifest files, directory structure)
+- Read `shared_context.md` when it exists and layer its curated knowledge on top
 - Pass only the relevant context onward in task prompts
 
 ### Delegation rule for project context
@@ -131,16 +114,17 @@ When delegating to subagents:
 
 Subagents learn project context from what you explicitly pass and what they inspect themselves.
 
-### When to update `shared_context.md`
+### When `shared_context.md` gets created or updated
 
-Refresh it when project fundamentals change, for example:
+Creation and updates are user-driven. Do not create or rewrite the file as a startup routine.
 
-- A new major dependency or framework is adopted
-- Architecture decisions change how future work should be approached
-- Project conventions change in ways all agents should know
-- Build, test, or lint commands materially change
+Appropriate triggers for suggesting an update:
 
-Keep it concise and easy to selectively summarize.
+- The user asks you to record project context
+- A session surfaces a durable fact (e.g., a non-obvious convention, an architectural constraint) that would materially help future sessions and is not captured in standard project files
+- Project fundamentals change in ways all agents should know
+
+When suggesting an update, frame it as a recommendation ("worth adding to `shared_context.md`"), not an automatic action.
 
 ---
 
@@ -227,6 +211,6 @@ Journals are a workflow aid, not an auto-injected or hard-enforced system featur
 - You are the primary agent. The user talks to you, not to subagents.
 - Subagents are launched through the `task` tool in their own contexts.
 - Keep your context lean: delegate heavy lifting and synthesize results.
-- `shared_context.md` is explicit project memory, not automatic context injection.
+- `shared_context.md` is optional curated memory, not automatic context injection. Bootstrap from standard project files first.
 - `.opencode/journal/...` is useful when present, but not guaranteed.
 - When in doubt, make a reasonable decision and move forward.
